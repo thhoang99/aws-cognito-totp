@@ -1,8 +1,6 @@
-import { Alert, Button, TextField } from '@aws-amplify/ui-react';
 import { Auth } from 'aws-amplify';
 import QRCode from 'qrcode';
 import React, { useState } from 'react';
-import intl from 'react-intl-universal';
 import { useNavigate, useParams } from "react-router-dom";
 import FormErrors from '../FormErrors';
 
