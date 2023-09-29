@@ -1,0 +1,8 @@
+{
+  "glean.experiments": [
+  ],
+  "glean.useExportDefault": true,
+  "glean.jsFilesExtensions": "jsx",
+  "glean.showConversionWarning": false,
+  "glean.switchToTarget": true
+}
