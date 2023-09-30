@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FormErrors from "../FormErrors";
 import Validate from "../utility/FormValidation";
 import { Auth } from "aws-amplify";
@@ -20,6 +20,12 @@ const LogIn = (props) => {
       blankfield: false
     });
   };
+
+  useEffect(() => {
+    if (props.auth.user) {
+      navigate("/welcome", { replace: true });
+    }
+  }, [props]);
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -53,7 +59,8 @@ const LogIn = (props) => {
           mfaType // MFA Type e.g. SMS_MFA, SOFTWARE_TOKEN_MFA
         );
         if (loggedUser) {
-          navigate("/welcome", { replace: true });
+          props.auth.setAuthStatus(true);
+          props.auth.setUser(loggedUser);          
         }
       } else if (user?.challengeName === 'NEW_PASSWORD_REQUIRED') {
         /*const { requiredAttributes } = user.challengeParam; // the array of required attributes, e.g ['email', 'phone_number']
@@ -98,8 +105,7 @@ const LogIn = (props) => {
       }
 
       console.log(user);
-      props.auth.setAuthStatus(true);
-      props.auth.setUser(user);
+
 
     } catch (error) {
       console.log(error)

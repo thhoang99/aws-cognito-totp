@@ -39,11 +39,13 @@ const App = () => {
     _setUserPass({ username, password })
   }
 
-  useEffect(() => {
+  
+
+  useEffect(() => { 
     const fetchUser = async () => {
       try {
         //const session = await Auth.currentSession();
-
+  
         //console.log(session);
         const user = await Auth.currentAuthenticatedUser();
         setAuthStatus(true);
@@ -55,10 +57,10 @@ const App = () => {
         }
       }
       setIsAuthenticating(false);
-    }
+    }   
     fetchUser();
 
-  }, [Auth.currentAuthenticatedUser]);
+  }, []);
 
   const authProps = {
     isAuthenticated: isAuthenticated,

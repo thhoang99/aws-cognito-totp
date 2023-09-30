@@ -31,7 +31,6 @@ const Register = (props) => {
     });
   }
 
-
   const handleSubmit = async event => {
     event.preventDefault();
     // Form validation

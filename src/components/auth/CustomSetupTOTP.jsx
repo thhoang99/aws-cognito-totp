@@ -1,7 +1,7 @@
 import { Auth } from 'aws-amplify';
 import QRCode from 'qrcode';
-import React, { useState } from 'react';
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import FormErrors from '../FormErrors';
 
 
@@ -14,6 +14,12 @@ export function CustomSetupTOTP(props) {
   const issuer = "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_Rc3FWWYRY"
   let navigate = useNavigate();
   //const user = props.auth.user;
+
+  useEffect(() => {
+    if (props.auth.user) {
+      navigate("/welcome", { replace: true });
+    }
+  }, [props]);
 
   const getTotpCode = (
     issuer,
@@ -57,7 +63,8 @@ export function CustomSetupTOTP(props) {
       .then(async () => {
         await Auth.setPreferredMFA(user, 'TOTP');
         navigate("/welcome");
-        //handleAuthStateChange();
+        props.auth.setAuthStatus(true);
+        props.auth.setUser(user);
         return null;
       })
       .catch(e => {
@@ -66,7 +73,7 @@ export function CustomSetupTOTP(props) {
           setErrorMessage(intl.get('custom-setup-totp.security-code-mismatch'));
         }*/
       })
-      .finally(() => {setIsVerifyingToken(false) });
+      .finally(() => { setIsVerifyingToken(false) });
   };
 
   React.useEffect(() => {
@@ -97,38 +104,38 @@ export function CustomSetupTOTP(props) {
       <div className="container">
         <h1>Setup MFA</h1>
         <p>
-          Scan QR below use an authenticator app such as Authy, Google Authenticator 
+          Scan QR below use an authenticator app such as Authy, Google Authenticator
           or Microsoft Authenticator, after that type code from your Authenticator to
           input.
         </p>
         <FormErrors formerrors={errorMessage} />
         <form onSubmit={() => false} >
-            {!isLoading && (
-              <>
-                <img
-                  data-amplify-qrcode
-                  src={qrCode}
-                  alt="qr code"
-                  width="228"
-                  height="228"
-                />
-                <div className="field has-addons">
-                  <div className="control">
-                    <input className="input" type="text" onChange={e => {
-                      setToken(e.target.value);
-                    }} placeholder="Your Code" />
-                  </div>
-                  <div className="control">
-                    <a className="button is-info"
-                      disabled={!isValidToken() || isVerifyingToken}
-                      onClick={verifyTotpToken}>
-                      Send
-                    </a>
-                  </div>
-                </div>              
-              </>
-            )}
-          </form>
+          {!isLoading && (
+            <>
+              <img
+                data-amplify-qrcode
+                src={qrCode}
+                alt="qr code"
+                width="228"
+                height="228"
+              />
+              <div className="field has-addons">
+                <div className="control">
+                  <input className="input" type="text" onChange={e => {
+                    setToken(e.target.value);
+                  }} placeholder="Your Code" />
+                </div>
+                <div className="control">
+                  <a className="button is-info"
+                    disabled={!isValidToken() || isVerifyingToken}
+                    onClick={verifyTotpToken}>
+                    Send
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+        </form>
       </div>
     </section>
 
