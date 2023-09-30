@@ -97,7 +97,8 @@ export function CustomSetupTOTP(props) {
       <div className="container">
         <h1>Setup MFA</h1>
         <p>
-          Scan QR below, after that type code from your Authenticator to
+          Scan QR below use an authenticator app such as Authy, Google Authenticator 
+          or Microsoft Authenticator, after that type code from your Authenticator to
           input.
         </p>
         <FormErrors formerrors={errorMessage} />
